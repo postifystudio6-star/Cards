@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Invitations — Client Link Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --emerald: #071f17;
+      --emerald-card: #0d2e23;
+      --gold: #d4af37;
+      --gold-light: #f5d77f;
+      --ivory: #fbf7ee;
+      --muted: #a3b8b0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top, #0f382a 0%, var(--emerald) 70%);
+      color: var(--ivory);
+      min-height: 100vh;
+      padding: 28px 16px 60px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    header {
+      text-align: center;
+      padding: 24px 16px 32px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+      margin-bottom: 24px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      background: rgba(212, 175, 55, 0.08);
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(24px, 4vw, 34px);
+      color: var(--gold-light);
+      letter-spacing: 1px;
+    }
+    header p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 220px;
+      background: var(--emerald-card);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--ivory);
+      font-size: 14px;
+      outline: none;
+    }
+    .search-box:focus { border-color: var(--gold); }
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: #071f17;
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ivory);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+    }
+    .btn-wa {
+      background: #1f8b4c;
+      color: #fff;
+    }
+
+    .config-panel {
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .config-panel.open { display: block; }
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .config-grid input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      background: var(--emerald);
+      color: var(--ivory);
+      font-size: 13px;
+    }
+
+    .cards-grid {
+      display: grid;
+      gap: 14px;
+    }
+    .card-item {
+      background: var(--emerald-card);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.22);
+    }
+    .card-info h3 {
+      font-size: 17px;
+      color: var(--gold-light);
+      text-transform: capitalize;
+      margin-bottom: 4px;
+    }
+    .card-url {
+      font-size: 12.5px;
+      color: var(--muted);
+      word-break: break-all;
+      font-family: monospace;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .status-box {
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      border: 1px dashed rgba(212, 175, 55, 0.3);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--gold-light);
+      color: #071f17;
+      font-weight: 700;
+      padding: 12px 22px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: transform 0.25s ease;
+      z-index: 99;
+      font-size: 13px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">Royal Digital Studio</div>
+      <h1>Client Invitation Links</h1>
+      <p>Har naya folder upload hote hi link khud ba khud yahan ban jayega — 1 click se copy karein!</p>
+    </header>
+
+    <div class="toolbar">
+      <input type="text" id="searchInput" class="search-box" placeholder="🔍 Client ka naam search karein (e.g. hmad-sara)..." />
+      <button class="btn btn-outline" onclick="toggleConfig()">⚙️ Repo Settings</button>
+      <button class="btn btn-gold" onclick="loadFolders()">↻ Refresh</button>
+    </div>
+
+    <div class="config-panel" id="configPanel">
+      <strong style="color:var(--gold-light);font-size:13px;">GitHub / Custom Domain Settings (Auto-Detect ke ilawa manually set karein)</strong>
+      <div class="config-grid">
+        <input type="text" id="ghUser" placeholder="GitHub Username (e.g. postify)" />
+        <input type="text" id="ghRepo" placeholder="Repository Name (e.g. cards)" />
+        <input type="text" id="baseDomain" placeholder="Live Base URL (optional, e.g. https://cards.pages.dev)" />
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button class="btn btn-gold" onclick="saveConfig()">Save & Load Links</button>
+      </div>
+    </div>
+
+    <div id="cardsContainer" class="cards-grid">
+      <div class="status-box">⏳ Client folders load ho rahe hain...</div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">✅ Link Copy Ho Gaya!</div>
+
+  <script>
+    const STORAGE_KEY = 'royal_card_manager_cfg_v1';
+    let allFolders = [];
+
+    function detectDefaults() {
+      const host = window.location.hostname;
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      let user = '', repo = '', base = window.location.origin + window.location.pathname.replace(/index\.html$/, '');
+      if (!base.endsWith('/')) base += '/';
+
+      if (host.endsWith('.github.io')) {
+        user = host.replace('.github.io', '');
+        repo = pathParts[0] || '';
+      }
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      return {
+        user: saved.user || user,
+        repo: saved.repo || repo,
+        base: saved.base || base
+      };
+    }
+
+    function toggleConfig() {
+      document.getElementById('configPanel').classList.toggle('open');
+    }
+
+    function saveConfig() {
+      const cfg = {
+        user: document.getElementById('ghUser').value.trim(),
+        repo: document.getElementById('ghRepo').value.trim(),
+        base: document.getElementById('baseDomain').value.trim()
+      };
+      if (cfg.base && !cfg.base.endsWith('/')) cfg.base += '/';
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+      document.getElementById('configPanel').classList.remove('open');
+      loadFolders();
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    function copyLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('✅ Link Copy Ho Gaya!');
+      });
+    }
+
+    function formatTitle(slug) {
+      return slug.replace(/[-_]+/g, ' & ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function renderFolders(list) {
+      const container = document.getElementById('cardsContainer');
+      const cfg = detectDefaults();
+      const baseUrl = cfg.base || (window.location.origin + '/');
+
+      if (!list.length) {
+        container.innerHTML = `<div class="status-box">Koi client folder nahi mila. Repository mein <b>client-name/index.html</b> upload kar ke Refresh dabayein.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(folder => {
+        const fullUrl = `${baseUrl}${folder}/`;
+        const waText = encodeURIComponent(`Assalam-o-Alaikum! ✨ Aap ka Royal Digital Wedding Invitation Card tayyar hai:\n${fullUrl}`);
+        return `
+          <div class="card-item">
+            <div class="card-info">
+              <h3>💍 ${formatTitle(folder)}</h3>
+              <div class="card-url">${fullUrl}</div>
+            </div>
+            <div class="card-actions">
+              <a href="${fullUrl}" target="_blank" class="btn btn-outline">👁️ Open Card</a>
+              <button class="btn btn-gold" onclick="copyLink('${fullUrl}')">📋 Copy Link</button>
+              <a href="https://wa.me/?text=${waText}" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadFolders() {
+      const cfg = detectDefaults();
+      document.getElementById('ghUser').value = cfg.user;
+      document.getElementById('ghRepo').value = cfg.repo;
+      document.getElementById('baseDomain').value = cfg.base;
+
+      const container = document.getElementById('cardsContainer');
+      if (!cfg.user || !cfg.repo) {
+        document.getElementById('configPanel').classList.add('open');
+        container.innerHTML = `<div class="status-box">Upar <b>Repo Settings</b> mein apna GitHub Username aur Repository Name likh kar Save karein.</div>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="status-box">⏳ Folders fetch ho rahe hain...</div>`;
+      try {
+        const res = await fetch(`https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/`);
+        if (!res.ok) throw new Error('Repo private hai ya naam ghalat hai');
+        const items = await res.json();
+        allFolders = items
+          .filter(item => item.type === 'dir' && !item.name.startsWith('.'))
+          .map(item => item.name);
+        renderFolders(allFolders);
+      } catch (err) {
+        document.getElementById('configPanel').classList.add('open');
+        container.innerHTML = `<div class="status-box">⚠️ Folders auto-load nahi ho sake (${err.message}). Agar repository <b>Private</b> hai to isay <b>Public</b> rakhein ya settings check karein.</div>`;
+      }
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      renderFolders(allFolders.filter(f => f.toLowerCase().includes(q)));
+    });
+
+    loadFolders();
+  </script>
+</body>
+</html>
