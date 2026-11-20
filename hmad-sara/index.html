@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ayaan & Sara — Royal Wedding Invitation</title>
+  <meta property="og:title" content="Ayaan & Sara — Royal Wedding Invitation" />
+  <meta property="og:description" content="Together with their families, request the honor of your presence (20 DECEMBER 2026)." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Locked to Opening Scene's Royal Emerald Velvet, Warm Ivory & Champagne Gold Palette */
+      --bg-outer: #04120d;
+      --velvet-primary: #071f17;
+      --velvet-secondary: #0d3326;
+      --gold-light: #fcf6ba;
+      --gold-mid: #d4af37;
+      --gold-dark: #8c6011;
+      --ivory-bg: #fbf7ee;
+      --ivory-card: #fffdf9;
+      --ink-text: #22180e;
+      --ink-muted: #5c462b;
+      --font-heading: 'Cinzel Decorative', serif;
+      --font-script: 'Great Vibes', cursive;
+      --font-body: 'Cormorant Garamond', serif;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; padding: 0; background: #040c09; color: #f4efe6; font-family: 'Cormorant Garamond', serif; }
+
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-urdu { font-family: 'Noto Nastaliq Urdu', serif; line-height: 2.15; }
+    .card-heading-font { font-family: var(--font-heading); }
+    .card-script-font { font-family: var(--font-script); }
+    .card-body-font { font-family: var(--font-body); }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.35); }
+    ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.45); border-radius: 999px; }
+
+    /* ======================== DUAL-ASPECT CARD SHELL ======================== */
+    .perspective-stage {
+      perspective: 1600px;
+      transform-style: preserve-3d;
+      width: 100%;
+    }
+
+    .card-3d-shell {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+      background: var(--velvet-primary);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.92), 0 0 0 1px rgba(212, 175, 55, 0.35);
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease-out, max-width 0.35s ease;
+      overflow-x: hidden;
+    }
+
+    .card-3d-shell.locked-opening {
+      height: calc(100vh - 72px);
+      max-height: calc(100vh - 72px);
+      overflow: hidden !important;
+    }
+
+    .card-3d-shell.mode-mobile {
+      max-width: 430px;
+      border-radius: 28px;
+    }
+
+    .card-3d-shell.mode-laptop {
+      max-width: 100%;
+      border-radius: 16px;
+    }
+
+    /* ======================== HERO VIDEO STAGE ======================== */
+    .hero-video-stage {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 72px);
+      min-height: 520px;
+      background: var(--bg-outer);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-video-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      overflow: hidden;
+    }
+
+    .hero-video-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Wax Seal Hotspot */
+    .wax-hotspot {
+      position: absolute;
+      z-index: 25;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+    .wax-hotspot.sealed-opened {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .seal-ring {
+      border-radius: 50%;
+      border: 2px solid rgba(252, 246, 186, 0.92);
+      background: radial-gradient(circle, rgba(252, 246, 186, 0.22) 0%, rgba(212, 175, 55, 0.05) 70%, transparent 100%);
+      box-shadow: 0 0 28px rgba(252, 246, 186, 0.72), inset 0 0 18px rgba(252, 246, 186, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: sealPulse 2.1s infinite ease-in-out;
+      transition: all 0.25s ease;
+    }
+    .wax-hotspot.invisible-mode .seal-ring {
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+      animation: none;
+    }
+    .wax-hotspot.invisible-mode .seal-ring span { opacity: 0; }
+
+    @keyframes sealPulse {
+      0%, 100% { transform: scale(0.95); }
+      50% { transform: scale(1.06); }
+    }
+
+    .seal-badge-label {
+      margin-top: 14px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(7, 31, 23, 0.88);
+      border: 1px solid rgba(242, 210, 114, 0.8);
+      backdrop-filter: blur(8px);
+      color: #fcf6ba;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.75);
+    }
+
+    .gold-calligraphy {
+      background: linear-gradient(135deg, #fffbe2 0%, #f7da7e 28%, #c99626 56%, #fff2be 82%, #b5821c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 4px 14px rgba(10, 6, 1, 0.92));
+    }
+
+    .gold-foil-ink {
+      background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-mid) 48%, var(--gold-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .courtyard-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 16;
+      padding: 40px 18px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(4, 18, 13, 0.72) 0%, rgba(4, 18, 13, 0.2) 70%, transparent 100%);
+      opacity: 0;
+      transform: translateY(-14px) scale(0.95);
+      transition: all 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .courtyard-overlay.active { opacity: 1; transform: translateY(0) scale(1); }
+
+    .scroll-cue-pill {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 22;
+      padding: 7px 18px;
+      border-radius: 999px;
+      background: rgba(7, 31, 23, 0.9);
+      border: 1px solid var(--gold-mid);
+      color: var(--gold-light);
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+    .scroll-cue-pill.visible {
+      opacity: 1;
+      pointer-events: auto;
+      cursor: pointer;
+      animation: bounceCue 2s infinite;
+    }
+    @keyframes bounceCue {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -6px); }
+    }
+
+    /* ======================== 10 CARD BODY ARCHITECTURES ======================== */
+    .ivory-sheet-wrap {
+      position: relative;
+      z-index: 14;
+      background: radial-gradient(circle at 50% 0%, var(--velvet-secondary) 0%, var(--velvet-primary) 55%, var(--bg-outer) 100%);
+      padding: 32px 14px 52px;
+    }
+    .card-3d-shell.mode-laptop .ivory-sheet-wrap {
+      padding: 52px 44px 72px;
+    }
+
+    .ivory-sheet {
+      position: relative;
+      max-width: 980px;
+      margin: 0 auto;
+      background: radial-gradient(circle at 50% 8%, var(--ivory-card) 0%, var(--ivory-bg) 72%);
+      color: var(--ink-text);
+      border-radius: 28px;
+      border: 2px solid var(--gold-mid);
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.8), inset 0 0 0 6px var(--ivory-bg), inset 0 0 0 7.5px rgba(212, 175, 55, 0.58);
+      padding: 44px 20px 42px;
+      transition: all 0.35s ease;
+    }
+    .card-3d-shell.mode-laptop .ivory-sheet { padding: 58px 50px; }
+
+    /* Arch 01: Mughal Palace Pavilions */
+    .arch-01 { border-radius: 260px 260px 28px 28px; }
+    /* Arch 02: Royal Shahi Farman (Seamless Silk Scroll) */
+    .arch-02 {
+      border-radius: 14px;
+      border-top: 14px solid var(--gold-mid);
+      border-bottom: 14px solid var(--gold-mid);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.85), inset 0 18px 24px -14px rgba(140,96,17,0.35), inset 0 -18px 24px -14px rgba(140,96,17,0.35);
+    }
+    /* Arch 03: Vogue / Sabyasachi Editorial */
+    .arch-03 {
+      border-radius: 4px;
+      border-width: 1px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.75), inset 0 0 0 14px var(--ivory-card), inset 0 0 0 15px rgba(212,175,55,0.45);
+    }
+    /* Arch 04: Sheesh Mahal Mirror Mosaic */
+    .arch-04 {
+      background-image: repeating-linear-gradient(45deg, rgba(212,175,55,0.045) 0, rgba(212,175,55,0.045) 14px, transparent 14px, transparent 28px),
+                        repeating-linear-gradient(-45deg, rgba(7,31,23,0.03) 0, rgba(7,31,23,0.03) 14px, transparent 14px, transparent 28px),
+                        radial-gradient(circle at 50% 8%, var(--ivory-card) 0%, var(--ivory-bg) 72%);
+      border-style: double;
+      border-width: 6px;
+    }
+    /* Arch 05: 3D Layered Velvet Stack */
+    .arch-05 {
+      background: linear-gradient(180deg, #0b2b20 0%, #061812 100%);
+      color: #fbf7ee;
+      border: 2px solid var(--gold-mid);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9), inset 0 0 0 8px #071f17, inset 0 0 0 9.5px rgba(212,175,55,0.55);
+    }
+    .arch-05 .arch-event-card {
+      background: linear-gradient(180deg, rgba(13,51,38,0.92) 0%, rgba(7,31,23,0.96) 100%);
+      color: #fbf7ee;
+    }
+    /* Arch 06: Botanical Bagh-e-Bahar */
+    .arch-06 {
+      border-radius: 48px;
+      box-shadow: 0 24px 65px rgba(0,0,0,0.8), inset 0 0 0 10px #eef4ea, inset 0 0 0 12px var(--gold-mid);
+    }
+    /* Arch 07: Royal Passport & Golden Ticket */
+    .arch-07 {
+      border-radius: 22px;
+      border: 2px dashed var(--gold-mid);
+      box-shadow: 0 24px 65px rgba(0,0,0,0.8), 0 0 0 8px var(--velvet-primary), 0 0 0 10px var(--gold-mid);
+    }
+    /* Arch 08: Zardozi Paisley Heritage */
+    .arch-08 {
+      border-radius: 36px;
+      box-shadow: 0 24px 65px rgba(0,0,0,0.8), inset 0 0 0 6px var(--velvet-primary), inset 0 0 0 10px var(--gold-mid), inset 0 0 0 14px var(--velvet-primary), inset 0 0 0 15.5px var(--gold-light);
+    }
+    /* Arch 09: Modern Haute Couture */
+    .arch-09 {
+      border-radius: 0;
+      border-left: 10px solid var(--gold-mid);
+      border-right: 10px solid var(--gold-mid);
+      border-top: 1px solid rgba(212,175,55,0.4);
+      border-bottom: 1px solid rgba(212,175,55,0.4);
+    }
+    /* Arch 10: Grand Darbar Royal Procession */
+    .arch-10 {
+      border-radius: 180px 180px 180px 180px / 54px 54px 54px 54px;
+      border: 3px solid var(--gold-mid);
+    }
+
+    /* Responsive Grids */
+    .events-grid-responsive {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .card-3d-shell.mode-laptop .events-grid-responsive {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .gallery-grid-responsive {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .card-3d-shell.mode-laptop .gallery-grid-responsive {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .arch-event-card {
+      background: linear-gradient(180deg, var(--ivory-card) 0%, rgba(212, 175, 55, 0.09) 100%);
+      border: 1.5px solid rgba(212, 175, 55, 0.75);
+      border-radius: 130px 130px 20px 20px;
+      padding: 30px 18px 24px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), inset 0 0 0 4px rgba(255,253,249,0.5);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    }
+    .arch-02 .arch-event-card, .arch-03 .arch-event-card, .arch-09 .arch-event-card {
+      border-radius: 14px;
+    }
+    .arch-07 .arch-event-card {
+      border-radius: 18px;
+      border-style: dashed;
+    }
+    .arch-event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.14);
+    }
+
+    /* ======================== HEART-SHAPED SCRATCH-TO-REVEAL ======================== */
+    .heart-scratch-stage {
+      position: relative;
+      width: 250px;
+      height: 226px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.55s ease;
+    }
+    .heart-scratch-stage.heart-revealed {
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.72));
+    }
+    .heart-clip-box {
+      position: relative;
+      width: 232px;
+      height: 210px;
+      clip-path: url(#royalHeartClip);
+      -webkit-clip-path: url(#royalHeartClip);
+      background: radial-gradient(circle at 50% 42%, #fffdf9 0%, #f5ebd6 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px 36px;
+    }
+    .heart-clip-box canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      touch-action: none;
+      z-index: 6;
+      transition: opacity 0.65s ease;
+    }
+    .heart-clip-box canvas.foil-faded {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .heart-gold-frame-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Studio Sidebar Controls */
+    .studio-section-block {
+      border: 1px solid rgba(212, 175, 55, 0.24);
+      background: rgba(8, 22, 17, 0.88);
+      border-radius: 18px;
+      padding: 14px;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .studio-section-block.active-sync {
+      border-color: #f2d272;
+      box-shadow: 0 0 0 1px rgba(242, 210, 114, 0.45), 0 12px 28px rgba(0, 0, 0, 0.55);
+    }
+
+    .studio-input {
+      width: 100%;
+      background: rgba(4, 14, 10, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.32);
+      color: #fbf7ef;
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+    }
+    .studio-input:focus { outline: none; border-color: #f2d272; }
+
+    .studio-label {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: #e6c875;
+      margin-bottom: 4px;
+    }
+  
+:root { --font-heading:'Playfair Display', serif; --font-script:'Alex Brush', cursive; --font-body:'Cormorant Garamond', serif; }
+.card-3d-shell.locked-opening{height:100dvh;max-height:100dvh;}.hero-video-stage{height:100dvh;}</style>
+</head>
+<body style="background:#04120d;margin:0;overflow-x:hidden;">
+  <svg width="0" height="0" style="position:absolute;pointer-events:none;" aria-hidden="true">
+    <defs>
+      <clipPath id="royalHeartClip" clipPathUnits="objectBoundingBox">
+        <path d="M 0.5,0.94 C 0.5,0.94 0.04,0.64 0.04,0.32 C 0.04,0.14 0.18,0.03 0.34,0.03 C 0.43,0.03 0.48,0.08 0.5,0.14 C 0.52,0.08 0.57,0.03 0.66,0.03 C 0.82,0.03 0.96,0.14 0.96,0.32 C 0.96,0.64 0.5,0.94 0.5,0.94 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+  <canvas id="clientViewportParticles" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50;"></canvas>
+  <div id="liveCardShell" class="card-3d-shell locked-opening" style="transform: none;">
+
+          <!-- 1. FULL-VIEWPORT HERO VIDEO STAGE -->
+          <section id="heroStageAnchor" class="hero-video-stage">
+            <div class="hero-video-frame">
+              <video id="cardVideo" src="https://res.cloudinary.com/j6vfpcgl/video/upload/v1795102538/create_in_landscape_mode_dc2aba76_1080p.mp4" playsinline="" preload="auto"></video>
+
+              <!-- Adjustable & Hideable Wax Seal Hotspot -->
+              <div id="cardWaxHotspot" class="wax-hotspot invisible-mode" style="left: 50%; top: 50%;" role="button" tabindex="0">
+                <div id="sealRingVisual" class="seal-ring" style="width: 112px; height: 112px;">
+                  <span id="cardMonogramBadge" class="card-heading-font font-bold text-lg text-amber-100 drop-shadow">A&amp;S</span>
+                </div>
+                <div id="sealHintPill" class="seal-badge-label">✦ Tap to Open ✦</div>
+              </div>
+
+              <!-- Courtyard Calligraphy Reveal -->
+              <div id="cardCourtyardOverlay" class="courtyard-overlay">
+                <p class="font-cinzel text-[10px] font-semibold tracking-[0.26em] uppercase text-amber-100 mb-1">The Wedding Celebration Of</p>
+                <h2 id="cardHeroNames" class="card-script-font text-5xl gold-calligraphy leading-tight">Ayaan &amp; Sara</h2>
+              </div>
+
+              <!-- Clean Scroll Down Cue After Opening -->
+              <div id="scrollCuePill" class="scroll-cue-pill">[ SCROLL DOWN ]</div>
+            </div>
+          </section>
+
+          <!-- 2. CONTINUOUS INVITATION SHEET -->
+          <div id="cardSheetAnchor" class="ivory-sheet-wrap">
+            <div id="ivorySheetCard" class="ivory-sheet arch-06">
+              <!-- Royal Monogram Crest + Bismillah -->
+              <div id="secBismillah" class="text-center mb-4">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full border-2 mb-2 shadow-sm" style="border-color: var(--gold-mid); background: var(--velvet-primary); color: var(--gold-light);">
+                  <span id="sheetCrestMono" class="card-heading-font text-base font-bold">A&amp;S</span>
+                </div>
+                <p class="text-2xl sm:text-3xl font-semibold" style="color: var(--gold-mid);">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+              </div>
+
+              <!-- Couple & Parents -->
+              <div id="cardCoupleAnchor" class="text-center mb-8">
+                <p class="font-cinzel text-[10px] font-semibold tracking-[0.26em] uppercase" style="color: var(--gold-mid);">Together With Their Families</p>
+                <h2 id="cardSheetNames" class="card-script-font text-5xl sm:text-6xl gold-foil-ink my-2">Ayaan &amp; Sara</h2>
+                <p id="cardUrduNamesDisplay" class="hidden font-urdu text-2xl font-bold my-1" style="color: var(--gold-mid);">ایان اور سارہ</p>
+
+                <div id="secParents" class="mt-3 space-y-1 text-base sm:text-lg opacity-85">
+                  <p id="cardGroomParents">Son of Mr. &amp; Mrs. Tariq Mahmood</p>
+                  <p class="text-xs uppercase tracking-widest font-cinzel" style="color: var(--gold-mid);">&amp;</p>
+                  <p id="cardBrideParents">Daughter of Mr. &amp; Mrs. Kamran Siddiqui</p>
+                </div>
+
+                <p class="card-body-font text-lg sm:text-xl mt-4 max-w-xl mx-auto leading-relaxed">
+                  Request the honor of your presence and prayers as they unite in the sacred bond of Nikah.
+                </p>
+                <p id="cardUrduLineDisplay" class="hidden font-urdu text-base mt-2 opacity-85">ہم آپ کو اس پرمسرت تقریب میں شرکت کی دعوت دیتے ہیں</p>
+              </div>
+
+              <!-- Heart-Shaped Scratch Date (50% Auto-Reveal + Bumper Fountain) + Calendar + Countdown -->
+              <div id="cardScratchAnchor" class="my-8 text-center">
+                <div id="secScratch" class="mb-6">
+                  <h3 class="font-cinzel text-sm font-bold tracking-[0.22em] uppercase" style="color: var(--gold-mid);">Save The Date</h3>
+                  <p class="italic text-sm mb-3 opacity-80">Scratch half the golden heart to reveal</p>
+
+                  <div id="heartScratchStage" class="heart-scratch-stage">
+                    <div class="heart-clip-box">
+                      <div class="text-center px-3">
+                        <div class="text-base mb-0.5" style="color: var(--gold-dark);">♛</div>
+                        <div id="cardRevealDate" class="font-cinzel font-bold text-base leading-snug" style="color: #071f17;">20 DECEMBER 2026</div>
+                        <div class="text-xs font-semibold mt-0.5" style="color: var(--gold-dark);">Insha'Allah</div>
+                      </div>
+                      <canvas id="cardScratchCanvas" width="232" height="210"></canvas>
+                    </div>
+                    <!-- Ornate Gold Heart Border Frame -->
+                    <svg class="heart-gold-frame-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                      <path d="M 50,94 C 50,94 4,64 4,32 C 4,14 18,3 34,3 C 43,3 48,8 50,14 C 52,8 57,3 66,3 C 82,3 96,14 96,32 C 96,64 50,94 50,94 Z" fill="none" stroke="#d4af37" stroke-width="2.4"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <div id="secCalendar" class="my-5">
+                  <button id="addCalendarBtn" type="button" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-cinzel text-[10px] font-bold tracking-[0.2em] uppercase shadow-md cursor-pointer transition hover:brightness-110" style="background: var(--velvet-primary); color: var(--gold-light); border: 1px solid var(--gold-mid);">
+                    📅 Add Date to Calendar
+                  </button>
+                </div>
+
+                <div id="secCountdown" class="my-6">
+                  <h3 class="font-cinzel text-sm font-bold tracking-[0.22em] uppercase mb-3" style="color: var(--gold-mid);">Counting Every Moment</h3>
+                  <div class="grid grid-cols-4 gap-2.5 max-w-sm mx-auto">
+                    <div class="rounded-2xl py-3 px-1 border-2" style="background: var(--velvet-primary); border-color: var(--gold-mid);">
+                      <div id="valDays" class="font-cinzel text-xl font-bold" style="color: var(--gold-light);">30</div>
+                      <div class="font-cinzel text-[8px] tracking-widest uppercase text-amber-100/80">Days</div>
+                    </div>
+                    <div class="rounded-2xl py-3 px-1 border-2" style="background: var(--velvet-primary); border-color: var(--gold-mid);">
+                      <div id="valHours" class="font-cinzel text-xl font-bold" style="color: var(--gold-light);">20</div>
+                      <div class="font-cinzel text-[8px] tracking-widest uppercase text-amber-100/80">Hours</div>
+                    </div>
+                    <div class="rounded-2xl py-3 px-1 border-2" style="background: var(--velvet-primary); border-color: var(--gold-mid);">
+                      <div id="valMins" class="font-cinzel text-xl font-bold" style="color: var(--gold-light);">35</div>
+                      <div class="font-cinzel text-[8px] tracking-widest uppercase text-amber-100/80">Mins</div>
+                    </div>
+                    <div class="rounded-2xl py-3 px-1 border-2" style="background: var(--velvet-primary); border-color: var(--gold-mid);">
+                      <div id="valSecs" class="font-cinzel text-xl font-bold" style="color: var(--gold-light);">17</div>
+                      <div class="font-cinzel text-[8px] tracking-widest uppercase text-amber-100/80">Secs</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Events Timeline -->
+              <div id="cardEventsAnchor" class="my-9 text-center">
+                <h3 class="font-cinzel text-sm font-bold tracking-[0.22em] uppercase mb-5" style="color: var(--gold-mid);">Wedding Celebrations</h3>
+                <div id="cardEventsList" class="events-grid-responsive">
+          <div class="arch-event-card">
+            <div class="text-2xl mb-1">✨</div>
+            <h4 class="card-heading-font text-lg font-bold" style="color: var(--gold-mid);">Mayoun &amp; Dholki</h4>
+            <p class="text-base mt-1">Thursday, 17 Dec 2026 • 7:30 PM</p>
+            <p class="font-semibold text-base mt-0.5" style="color: var(--gold-dark);">Mahmood Residence Lawn</p>
+            <div class="my-2.5 mx-auto max-w-[230px] h-28 rounded-xl overflow-hidden border shadow-sm" style="border-color: var(--gold-mid);"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Mahmood Residence Lawn" class="w-full h-full object-cover"></div>
+            <p class="text-xs italic mt-1 opacity-80">Dress Code: Yellow &amp; Mustard</p>
+            <a href="https://maps.google.com" target="_blank" rel="noopener" class="inline-block mt-3 px-4 py-1.5 rounded-full font-cinzel text-[9px] tracking-[0.18em] uppercase shadow" style="background: var(--velvet-primary); color: var(--gold-light); border: 1px solid var(--gold-mid);">
+              📍 Open in Google Maps
+            </a>
+          </div>
+        
+          <div class="arch-event-card">
+            <div class="text-2xl mb-1">🌼</div>
+            <h4 class="card-heading-font text-lg font-bold" style="color: var(--gold-mid);">Mehndi Night</h4>
+            <p class="text-base mt-1">Friday, 18 Dec 2026 • 8:00 PM</p>
+            <p class="font-semibold text-base mt-0.5" style="color: var(--gold-dark);">Royal Palm Marquee</p>
+            <div class="my-2.5 mx-auto max-w-[230px] h-28 rounded-xl overflow-hidden border shadow-sm" style="border-color: var(--gold-mid);"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Royal Palm Marquee" class="w-full h-full object-cover"></div>
+            <p class="text-xs italic mt-1 opacity-80">Dress Code: Emerald &amp; Marigold</p>
+            <a href="https://maps.google.com" target="_blank" rel="noopener" class="inline-block mt-3 px-4 py-1.5 rounded-full font-cinzel text-[9px] tracking-[0.18em] uppercase shadow" style="background: var(--velvet-primary); color: var(--gold-light); border: 1px solid var(--gold-mid);">
+              📍 Open in Google Maps
+            </a>
+          </div>
+        
+          <div class="arch-event-card">
+            <div class="text-2xl mb-1">👑</div>
+            <h4 class="card-heading-font text-lg font-bold" style="color: var(--gold-mid);">Baraat &amp; Nikah</h4>
+            <p class="text-base mt-1">Sunday, 20 Dec 2026 • 7:00 PM</p>
+            <p class="font-semibold text-base mt-0.5" style="color: var(--gold-dark);">The Grand Mughal Courtyard</p>
+            <div class="my-2.5 mx-auto max-w-[230px] h-28 rounded-xl overflow-hidden border shadow-sm" style="border-color: var(--gold-mid);"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="The Grand Mughal Courtyard" class="w-full h-full object-cover"></div>
+            <p class="text-xs italic mt-1 opacity-80">Dress Code: Royal Formal / Traditional</p>
+            <a href="https://maps.google.com" target="_blank" rel="noopener" class="inline-block mt-3 px-4 py-1.5 rounded-full font-cinzel text-[9px] tracking-[0.18em] uppercase shadow" style="background: var(--velvet-primary); color: var(--gold-light); border: 1px solid var(--gold-mid);">
+              📍 Open in Google Maps
+            </a>
+          </div>
+        
+          <div class="arch-event-card">
+            <div class="text-2xl mb-1">🌹</div>
+            <h4 class="card-heading-font text-lg font-bold" style="color: var(--gold-mid);">Walima Reception</h4>
+            <p class="text-base mt-1">Monday, 21 Dec 2026 • 7:30 PM</p>
+            <p class="font-semibold text-base mt-0.5" style="color: var(--gold-dark);">Pearl Continental Ballroom</p>
+            <div class="my-2.5 mx-auto max-w-[230px] h-28 rounded-xl overflow-hidden border shadow-sm" style="border-color: var(--gold-mid);"><img src="https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Pearl Continental Ballroom" class="w-full h-full object-cover"></div>
+            <p class="text-xs italic mt-1 opacity-80">Dress Code: Pastels &amp; Evening Formals</p>
+            <a href="https://maps.google.com" target="_blank" rel="noopener" class="inline-block mt-3 px-4 py-1.5 rounded-full font-cinzel text-[9px] tracking-[0.18em] uppercase shadow" style="background: var(--velvet-primary); color: var(--gold-light); border: 1px solid var(--gold-mid);">
+              📍 Open in Google Maps
+            </a>
+          </div>
+        </div>
+              </div>
+
+              <!-- Optional Photo Gallery -->
+              <div id="cardGalleryAnchor" class="my-8">
+                <div id="secGallery" class="hidden text-center">
+                  <h3 class="font-cinzel text-sm font-bold tracking-[0.22em] uppercase mb-4" style="color: var(--gold-mid);">Cherished Moments</h3>
+                  <div id="cardGalleryGrid" class="gallery-grid-responsive">
+          <div class="aspect-[4/5] rounded-t-full rounded-b-xl overflow-hidden border-2 shadow-md" style="border-color: var(--gold-mid);">
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Couple" class="w-full h-full object-cover">
+          </div>
+        
+          <div class="aspect-[4/5] rounded-t-full rounded-b-xl overflow-hidden border-2 shadow-md" style="border-color: var(--gold-mid);">
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Couple" class="w-full h-full object-cover">
+          </div>
+        </div>
+                </div>
+              </div>
+
+              <!-- Separated Groom's Family & Bride's Family Contact Cards -->
+              <div id="cardFamiliesAnchor" class="my-8 pt-6 border-t border-amber-500/30 text-center max-w-2xl mx-auto">
+                <h3 class="font-cinzel text-sm font-bold tracking-[0.22em] uppercase mb-4" style="color: var(--gold-mid);">With Warm Regards From</h3>
+                <div id="familyCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div id="groomFamilyCard" class="p-4 rounded-2xl border bg-white/85 text-stone-900 shadow-sm" style="border-color: var(--gold-mid);">
+                    <p class="font-cinzel text-[10px] tracking-[0.2em] uppercase mb-1" style="color: var(--gold-dark);">Groom Side</p>
+                    <h4 id="groomCardTitle" class="card-heading-font text-base font-bold mb-2" style="color: var(--velvet-primary);">Groom's Family</h4>
+                    <a id="directHost1Btn" href="https://wa.me/923001234567" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl font-cinzel text-[10px] font-bold tracking-wider uppercase shadow-sm" style="background: var(--velvet-primary); color: var(--gold-light); border: 1px solid var(--gold-mid);">💬 WhatsApp Groom's Family</a>
+                  </div>
+                  <div id="brideFamilyCard" class="p-4 rounded-2xl border bg-white/85 text-stone-900 shadow-sm" style="border-color: var(--gold-mid);">
+                    <p class="font-cinzel text-[10px] tracking-[0.2em] uppercase mb-1" style="color: var(--gold-dark);">Bride Side</p>
+                    <h4 id="brideCardTitle" class="card-heading-font text-base font-bold mb-2" style="color: var(--velvet-primary);">Bride's Family</h4>
+                    <a id="directHost2Btn" href="https://wa.me/923217654321" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl font-cinzel text-[10px] font-bold tracking-wider uppercase shadow-sm" style="background: var(--velvet-primary); color: var(--gold-light); border: 1px solid var(--gold-mid);">💬 WhatsApp Bride's Family</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dedicated WhatsApp RSVP Section -->
+              <div id="cardRsvpAnchor" class="mt-7 pt-7 border-t border-amber-500/30 text-center max-w-lg mx-auto">
+                <div id="secDualRsvp">
+                  <h3 class="font-cinzel text-sm font-bold tracking-[0.22em] uppercase" style="color: var(--gold-mid);">RSVP Confirmation</h3>
+                  <p class="italic text-sm mt-1 mb-4 opacity-80">Kindly confirm your presence via WhatsApp</p>
+
+                  <form id="cardRsvpForm" class="space-y-2.5 text-left">
+                    <input id="rsvpGuestName" type="text" required="" placeholder="Your Full Name" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-amber-500/60 text-stone-900 card-body-font text-base">
+                    <div class="grid grid-cols-2 gap-2">
+                      <select id="rsvpSideSelect" class="px-3 py-2.5 rounded-xl bg-white border border-amber-500/60 text-stone-900 card-body-font text-base">
+                        <option value="host1">Groom's Family</option>
+                        <option value="host2">Bride's Family</option>
+                      </select>
+                      <select id="rsvpGuestsSelect" class="px-3 py-2.5 rounded-xl bg-white border border-amber-500/60 text-stone-900 card-body-font text-base">
+                        <option value="1 Guest">1 Guest</option>
+                        <option value="2 Guests" selected="">2 Guests</option>
+                        <option value="Family (4+)">Family (4+)</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl font-cinzel font-bold text-xs tracking-[0.18em] uppercase shadow-md cursor-pointer" style="background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid), var(--gold-dark)); color: #fff;">
+                      Confirm Attendance via WhatsApp
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+  
+  <script>
+    (function(){
+      const shell = document.getElementById('liveCardShell');
+      const vid = document.getElementById('cardVideo');
+      const hot = document.getElementById('cardWaxHotspot');
+      const ring = document.getElementById('sealRingVisual');
+      const ov = document.getElementById('cardCourtyardOverlay');
+      const cue = document.getElementById('scrollCuePill');
+      const aud = document.getElementById('clientBgAudio');
+      const mobileVid = 'https://res.cloudinary.com/j6vfpcgl/video/upload/v1795086857/Couple_clasping_hands_at_wedding_27c32f61_1080p.mp4';
+      const laptopVid = 'https://res.cloudinary.com/j6vfpcgl/video/upload/v1795102538/create_in_landscape_mode_dc2aba76_1080p.mp4';
+      const sealMobile = {"x":52,"y":53,"size":104};
+      const sealLaptop = {"x":50,"y":50,"size":112};
+      let opened = false;
+
+      // 1:1 Viewport-Locked Petals & Gold Dust + Bumper Fountain
+      const pCanvas = document.getElementById('clientViewportParticles');
+      const pCtx = pCanvas.getContext('2d');
+      const ambient = [];
+      const bursts = [];
+      let lastT = performance.now();
+
+      function syncParticlesBox() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        if (pCanvas.width !== Math.round(w*dpr) || pCanvas.height !== Math.round(h*dpr)) {
+          pCanvas.width = Math.round(w*dpr);
+          pCanvas.height = Math.round(h*dpr);
+        }
+        pCtx.setTransform(dpr,0,0,dpr,0,0);
+        return { w, h };
+      }
+
+      if (true) {
+        const { w, h } = syncParticlesBox();
+        for (let i=0; i<22; i++) ambient.push({ k:'petal', x:Math.random()*w, y:Math.random()*h, r:5+Math.random()*5, vy:26+Math.random()*28, vx:(Math.random()-0.5)*16, rot:Math.random()*6.28, vr:(Math.random()-0.5)*1.8, ph:Math.random()*6.28, hue:i%2===0?'#be123c':'#e11d48' });
+        for (let i=0; i<15; i++) ambient.push({ k:'dust', x:Math.random()*w, y:Math.random()*h, r:1.4+Math.random()*2.1, vy:-(12+Math.random()*18), vx:(Math.random()-0.5)*12, ph:Math.random()*6.28 });
+      }
+
+      function triggerClientBumperFountain() {
+        const { w, h } = syncParticlesBox();
+        const hs = document.getElementById('heartScratchStage');
+        const hr = hs ? hs.getBoundingClientRect() : null;
+        const ox = hr ? hr.left + hr.width*0.5 : w*0.5;
+        const oy = hr ? hr.top + hr.height*0.5 : h*0.45;
+        [{x:ox,y:oy,c:100},{x:w*0.14,y:h*0.88,c:48},{x:w*0.86,y:h*0.88,c:48}].forEach(s => {
+          for (let i=0; i<s.c; i++) {
+            const a = -Math.PI*0.5 + (Math.random()-0.5)*Math.PI*1.65;
+            const sp = 130 + Math.random()*340;
+            const d = i%3===0;
+            bursts.push({ k:d?'dust':'petal', x:s.x, y:s.y, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-60, g:d?110:210, r:d?(2+Math.random()*2.8):(6+Math.random()*6), rot:Math.random()*6.28, vr:(Math.random()-0.5)*6, al:1, dec:0.22+Math.random()*0.18, hue:i%2===0?'#be123c':'#f43f5e' });
+          }
+        });
+      }
+
+      function loopParticles(now) {
+        const dt = Math.min(0.05, Math.max(0.001, (now - lastT)/1000));
+        lastT = now;
+        const { w, h } = syncParticlesBox();
+        pCtx.clearRect(0,0,w,h);
+        for (const p of ambient) {
+          p.ph += dt*2.2;
+          p.x += (p.vx + Math.sin(p.ph)*18)*dt;
+          p.y += p.vy*dt;
+          if (p.k==='petal') {
+            p.rot += p.vr*dt;
+            if (p.y > h+20) { p.y = -18; p.x = Math.random()*w; }
+            pCtx.save(); pCtx.translate(p.x,p.y); pCtx.rotate(p.rot); pCtx.scale(1, 0.65+0.35*Math.sin(p.rot*1.5));
+            pCtx.fillStyle = p.hue; pCtx.beginPath(); pCtx.ellipse(0,0,p.r*0.7,p.r,0,0,6.28); pCtx.fill(); pCtx.restore();
+          } else {
+            if (p.y < -15) { p.y = h+12; p.x = Math.random()*w; }
+            pCtx.save(); pCtx.globalAlpha = 0.45+0.55*Math.sin(p.ph*1.6); pCtx.fillStyle = '#f2d272';
+            pCtx.beginPath(); pCtx.arc(p.x,p.y,p.r*1.6,0,6.28); pCtx.fill(); pCtx.restore();
+          }
+        }
+        for (let i=bursts.length-1; i>=0; i--) {
+          const b = bursts[i];
+          b.vy += b.g*dt; b.vx *= Math.pow(0.92, dt*10); b.x += b.vx*dt; b.y += b.vy*dt; b.rot += b.vr*dt; b.al -= b.dec*dt;
+          if (b.al <= 0 || b.y > h+40) { bursts.splice(i,1); continue; }
+          pCtx.save(); pCtx.globalAlpha = Math.max(0, b.al);
+          if (b.k==='petal') { pCtx.translate(b.x,b.y); pCtx.rotate(b.rot); pCtx.fillStyle = b.hue; pCtx.beginPath(); pCtx.ellipse(0,0,b.r*0.7,b.r,0,0,6.28); pCtx.fill(); }
+          else { pCtx.fillStyle = '#fcf6ba'; pCtx.beginPath(); pCtx.arc(b.x,b.y,b.r*1.8,0,6.28); pCtx.fill(); }
+          pCtx.restore();
+        }
+        requestAnimationFrame(loopParticles);
+      }
+      requestAnimationFrame(loopParticles);
+
+      function syncViewportAspect() {
+        const isDesktop = window.innerWidth >= 768;
+        const targetSrc = isDesktop ? laptopVid : mobileVid;
+        const coords = isDesktop ? sealLaptop : sealMobile;
+        shell.classList.toggle('mode-laptop', isDesktop);
+        shell.classList.toggle('mode-mobile', !isDesktop);
+        hot.style.left = coords.x + '%';
+        hot.style.top = coords.y + '%';
+        ring.style.width = coords.size + 'px';
+        ring.style.height = coords.size + 'px';
+        if (!opened && vid.getAttribute('data-active-src') !== targetSrc) {
+          vid.setAttribute('data-active-src', targetSrc);
+          vid.src = targetSrc;
+        }
+      }
+      syncViewportAspect();
+      window.addEventListener('resize', syncViewportAspect);
+
+      vid.addEventListener('loadedmetadata', () => { if (!opened) { vid.pause(); vid.currentTime = 0.05; } });
+      function unlockCard() { shell.classList.remove('locked-opening'); if (cue) cue.classList.add('visible'); }
+      hot.addEventListener('click', () => {
+        if (opened) return;
+        opened = true;
+        hot.classList.add('sealed-opened');
+        vid.play().catch(()=>{ vid.muted=true; vid.play().catch(unlockCard); });
+        if (aud) aud.play().catch(()=>{});
+      });
+      vid.addEventListener('timeupdate', () => {
+        if (vid.currentTime >= 6.5) ov.classList.add('active');
+        if (vid.currentTime >= 9.4) { vid.pause(); unlockCard(); }
+      });
+      vid.addEventListener('ended', unlockCard);
+      if (cue) cue.addEventListener('click', () => document.getElementById('cardSheetAnchor').scrollIntoView({ behavior: 'smooth' }));
+
+      const mBtn = document.getElementById('clientMuteBtn');
+      if (mBtn && aud) mBtn.addEventListener('click', () => { aud.muted = !aud.muted; mBtn.textContent = aud.muted ? '🔇' : '♪'; });
+
+      // Heart Scratch-to-Reveal (50% Threshold)
+      const hs = document.getElementById('heartScratchStage');
+      const sc = document.getElementById('cardScratchCanvas');
+      if (sc) {
+        const ctx = sc.getContext('2d');
+        const g = ctx.createLinearGradient(0,0,sc.width,sc.height);
+        g.addColorStop(0,'#a67314'); g.addColorStop(0.5,'#fcf6ba'); g.addColorStop(1,'#8c6011');
+        ctx.fillStyle = g; ctx.fillRect(0,0,sc.width,sc.height);
+        ctx.fillStyle = '#2d1c04'; ctx.font = 'bold 11px Cinzel, serif'; ctx.textAlign = 'center';
+        ctx.fillText('✦ SCRATCH HEART ✦', sc.width/2, sc.height*0.44);
+        ctx.font = 'bold 10px Cinzel, serif';
+        ctx.fillText('TO REVEAL DATE', sc.width/2, sc.height*0.54);
+        let dr = false, rev = false;
+        const scr = (cx,cy) => {
+          const r = sc.getBoundingClientRect();
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.beginPath();
+          ctx.arc((cx-r.left)*(sc.width/r.width), (cy-r.top)*(sc.height/r.height), 22, 0, Math.PI*2);
+          ctx.fill();
+          if (!rev) {
+            const d = ctx.getImageData(0,0,sc.width,sc.height).data;
+            let tot = 0, clr = 0;
+            for (let y=Math.floor(sc.height*0.14); y<Math.floor(sc.height*0.84); y+=4) {
+              for (let x=Math.floor(sc.width*0.22); x<Math.floor(sc.width*0.78); x+=4) {
+                tot++; if (d[(y*sc.width+x)*4+3]===0) clr++;
+              }
+            }
+            if (tot>0 && (clr/tot)>=0.50) {
+              rev = true;
+              sc.classList.add('foil-faded');
+              if (hs) hs.classList.add('heart-revealed');
+              triggerClientBumperFountain();
+            }
+          }
+        };
+        sc.addEventListener('mousedown', e => { dr=true; scr(e.clientX,e.clientY); });
+        window.addEventListener('mouseup', () => dr=false);
+        sc.addEventListener('mousemove', e => { if(dr) scr(e.clientX,e.clientY); });
+        sc.addEventListener('touchstart', e => { dr=true; if(e.touches[0]) scr(e.touches[0].clientX,e.touches[0].clientY); }, {passive:true});
+        sc.addEventListener('touchend', () => dr=false);
+        sc.addEventListener('touchmove', e => { if(dr && e.touches[0]) scr(e.touches[0].clientX,e.touches[0].clientY); }, {passive:true});
+      }
+
+      const target = new Date('2026-12-20T19:00').getTime();
+      setInterval(() => {
+        const d = Math.max(0, target - Date.now());
+        if(document.getElementById('valDays')) document.getElementById('valDays').textContent = String(Math.floor(d/86400000)).padStart(2,'0');
+        if(document.getElementById('valHours')) document.getElementById('valHours').textContent = String(Math.floor((d/3600000)%24)).padStart(2,'0');
+        if(document.getElementById('valMins')) document.getElementById('valMins').textContent = String(Math.floor((d/60000)%60)).padStart(2,'0');
+        if(document.getElementById('valSecs')) document.getElementById('valSecs').textContent = String(Math.floor((d/1000)%60)).padStart(2,'0');
+      }, 1000);
+
+      const calBtn = document.getElementById('addCalendarBtn');
+      if (calBtn) calBtn.addEventListener('click', () => {
+        const dt = '2026-12-20T19:00'.replace(/[-:]/g,'') + '00';
+        const ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:' + dt + '\r\nSUMMARY:Ayaan & Sara Wedding\r\nEND:VEVENT\r\nEND:VCALENDAR';
+        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], {type:'text/calendar'})); a.download = 'Wedding_Invite.ics'; a.click();
+      });
+
+      const rsvpForm = document.getElementById('cardRsvpForm');
+      if (rsvpForm) rsvpForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('rsvpGuestName').value.trim();
+        const side = document.getElementById('rsvpSideSelect').value;
+        const guests = document.getElementById('rsvpGuestsSelect').value;
+        const phone = (side === 'host2' ? '923217654321' : '923001234567').replace(/\D/g,'');
+        const msg = encodeURIComponent('Assalam-o-Alaikum! I am ' + name + ' (' + guests + ') and I confirm my attendance at Ayaan & Sara Wedding (20 DECEMBER 2026).');
+        window.open('https://wa.me/' + phone + '?text=' + msg, '_blank', 'noopener');
+      });
+    })();
+  </script>
+</body>
+</html>
