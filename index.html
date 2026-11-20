@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Royal Invitations — Client Link Manager</title>
+  <title>Royal Invitations — Admin Link Manager</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -22,10 +22,79 @@
       min-height: 100vh;
       padding: 28px 16px 60px;
     }
-    .container { max-width: 820px; margin: 0 auto; }
+
+    /* PIN Lock Screen */
+    .lock-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #0e3427 0%, #051610 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+    }
+    .lock-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--emerald-card);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 22px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    }
+    .lock-icon {
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .lock-card h2 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold-light);
+      font-size: 21px;
+      margin-bottom: 6px;
+    }
+    .lock-card p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+    .pin-input {
+      width: 100%;
+      text-align: center;
+      letter-spacing: 10px;
+      font-size: 24px;
+      font-weight: 700;
+      padding: 13px;
+      border-radius: 14px;
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      background: var(--emerald);
+      color: var(--gold-light);
+      outline: none;
+      margin-bottom: 14px;
+    }
+    .pin-input:focus { border-color: var(--gold-light); }
+    .pin-error {
+      color: #ff7b7b;
+      font-size: 12.5px;
+      min-height: 18px;
+      margin-bottom: 10px;
+    }
+
+    /* Main Dashboard */
+    .container { max-width: 820px; margin: 0 auto; display: none; }
+    .container.unlocked { display: block; }
     header {
       text-align: center;
-      padding: 24px 16px 32px;
+      padding: 20px 16px 28px;
       border-bottom: 1px solid rgba(212, 175, 55, 0.25);
       margin-bottom: 24px;
     }
@@ -76,6 +145,7 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       text-decoration: none;
       transition: transform 0.15s ease, opacity 0.15s ease;
@@ -181,7 +251,21 @@
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <!-- 4-Digit Admin PIN Gate -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-card">
+      <div class="lock-icon">👑</div>
+      <h2>Royal Studio Admin</h2>
+      <p>Client links dekhne ke liye 4-digit PIN enter karein</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="4" inputmode="numeric" placeholder="••••" autofocus />
+      <div class="pin-error" id="pinError"></div>
+      <button class="btn btn-gold" style="width:100%;padding:13px;" onclick="verifyPin()">🔓 Unlock Dashboard</button>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div class="container" id="mainApp">
     <header>
       <div class="badge">Royal Digital Studio</div>
       <h1>Client Invitation Links</h1>
@@ -192,14 +276,15 @@
       <input type="text" id="searchInput" class="search-box" placeholder="🔍 Client ka naam search karein (e.g. hmad-sara)..." />
       <button class="btn btn-outline" onclick="toggleConfig()">⚙️ Repo Settings</button>
       <button class="btn btn-gold" onclick="loadFolders()">↻ Refresh</button>
+      <button class="btn btn-outline" onclick="lockDashboard()">🔒 Lock</button>
     </div>
 
     <div class="config-panel" id="configPanel">
-      <strong style="color:var(--gold-light);font-size:13px;">GitHub / Custom Domain Settings (Auto-Detect ke ilawa manually set karein)</strong>
+      <strong style="color:var(--gold-light);font-size:13px;">GitHub / Custom Domain Settings</strong>
       <div class="config-grid">
-        <input type="text" id="ghUser" placeholder="GitHub Username (e.g. postify)" />
-        <input type="text" id="ghRepo" placeholder="Repository Name (e.g. cards)" />
-        <input type="text" id="baseDomain" placeholder="Live Base URL (optional, e.g. https://cards.pages.dev)" />
+        <input type="text" id="ghUser" placeholder="GitHub Username (e.g. postifystudio6-star)" />
+        <input type="text" id="ghRepo" placeholder="Repository Name (e.g. Cards)" />
+        <input type="text" id="baseDomain" placeholder="Live Base URL (optional)" />
       </div>
       <div style="margin-top:10px;display:flex;gap:8px;">
         <button class="btn btn-gold" onclick="saveConfig()">Save & Load Links</button>
@@ -214,18 +299,55 @@
   <div id="toast" class="toast">✅ Link Copy Ho Gaya!</div>
 
   <script>
+    const ADMIN_PIN = '4554';
+    const AUTH_SESSION_KEY = 'royal_admin_unlocked_4554';
     const STORAGE_KEY = 'royal_card_manager_cfg_v1';
     let allFolders = [];
+
+    function unlockUI() {
+      document.getElementById('lockScreen').style.display = 'none';
+      document.getElementById('mainApp').classList.add('unlocked');
+      loadFolders();
+    }
+
+    function lockDashboard() {
+      sessionStorage.removeItem(AUTH_SESSION_KEY);
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinError').textContent = '';
+      document.getElementById('mainApp').classList.remove('unlocked');
+      document.getElementById('lockScreen').style.display = 'flex';
+      document.getElementById('pinInput').focus();
+    }
+
+    function verifyPin() {
+      const val = document.getElementById('pinInput').value.trim();
+      if (val === ADMIN_PIN) {
+        sessionStorage.setItem(AUTH_SESSION_KEY, '1');
+        document.getElementById('pinError').textContent = '';
+        unlockUI();
+      } else {
+        document.getElementById('pinError').textContent = '❌ Ghalat PIN! Dobara koshish karein.';
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinInput').focus();
+      }
+    }
+
+    document.getElementById('pinInput').addEventListener('input', (e) => {
+      if (e.target.value.length === 4) verifyPin();
+    });
+    document.getElementById('pinInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') verifyPin();
+    });
 
     function detectDefaults() {
       const host = window.location.hostname;
       const pathParts = window.location.pathname.split('/').filter(Boolean);
-      let user = '', repo = '', base = window.location.origin + window.location.pathname.replace(/index\.html$/, '');
+      let user = 'postifystudio6-star', repo = 'Cards', base = window.location.origin + window.location.pathname.replace(/index\.html$/, '');
       if (!base.endsWith('/')) base += '/';
 
       if (host.endsWith('.github.io')) {
         user = host.replace('.github.io', '');
-        repo = pathParts[0] || '';
+        repo = pathParts[0] || 'Cards';
       }
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
       return {
@@ -304,12 +426,6 @@
       document.getElementById('baseDomain').value = cfg.base;
 
       const container = document.getElementById('cardsContainer');
-      if (!cfg.user || !cfg.repo) {
-        document.getElementById('configPanel').classList.add('open');
-        container.innerHTML = `<div class="status-box">Upar <b>Repo Settings</b> mein apna GitHub Username aur Repository Name likh kar Save karein.</div>`;
-        return;
-      }
-
       container.innerHTML = `<div class="status-box">⏳ Folders fetch ho rahe hain...</div>`;
       try {
         const res = await fetch(`https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents/`);
@@ -321,7 +437,7 @@
         renderFolders(allFolders);
       } catch (err) {
         document.getElementById('configPanel').classList.add('open');
-        container.innerHTML = `<div class="status-box">⚠️ Folders auto-load nahi ho sake (${err.message}). Agar repository <b>Private</b> hai to isay <b>Public</b> rakhein ya settings check karein.</div>`;
+        container.innerHTML = `<div class="status-box">⚠️ Folders auto-load nahi ho sake (${err.message}).</div>`;
       }
     }
 
@@ -330,7 +446,9 @@
       renderFolders(allFolders.filter(f => f.toLowerCase().includes(q)));
     });
 
-    loadFolders();
+    if (sessionStorage.getItem(AUTH_SESSION_KEY) === '1') {
+      unlockUI();
+    }
   </script>
 </body>
 </html>
